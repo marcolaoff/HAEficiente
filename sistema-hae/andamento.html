@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Andamento de Projetos - Sistema HAE</title>
+  <style>
+    :root {
+      --cor-primaria: #cc1719;
+      --cor-secundaria: #000000;
+      --cor-fundo: #f4f4f4;
+      --cor-aprovado: #2e7d32;
+      --cor-erro: #c62828;
+      --cor-pendente: #0277bd;
+      --cor-branca: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cor-fundo);
+    }
+
+    header {
+      background-color: var(--cor-secundaria);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .banner h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      background-color: var(--cor-branca);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: var(--cor-primaria);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .info {
+      text-align: center;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .etapas {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .etapa {
+      border-left: 6px solid var(--cor-pendente);
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .etapa h3 {
+      margin: 0 0 10px;
+      color: var(--cor-primaria);
+    }
+
+    .etapa p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .etapa.aprovado {
+      border-left-color: var(--cor-aprovado);
+    }
+
+    .etapa.rejeitado {
+      border-left-color: var(--cor-erro);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: #888;
+      background-color: var(--cor-secundaria);
+      color: white;
+      padding: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .etapas {
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="imagens/logo_sp.jpeg" alt="Logo Governo SP" />
+    <img src="imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
+  </header>
+
+  <div class="banner">
+    <h1>Andamento do Processo HAE</h1>
+  </div>
+
+  <div class="container">
+    <h2>Acompanhe cada etapa do seu projeto</h2>
+    <p class="info">Veja abaixo em que fase seu projeto está no processo de concessão de HAEs.</p>
+
+    <div class="etapas">
+      <div class="etapa aprovado">
+        <h3>1. Inscrição Realizada</h3>
+        <p>Seu projeto foi inscrito com sucesso no sistema.</p>
+      </div>
+
+      <div class="etapa aprovado">
+        <h3>2. Avaliação da Coordenação</h3>
+        <p>Proposta aprovada para execução durante o semestre.</p>
+      </div>
+
+      <div class="etapa">
+        <h3>3. Execução do Projeto</h3>
+        <p>Projeto em andamento. Relatório deverá ser entregue ao final do semestre.</p>
+      </div>
+
+      <div class="etapa">
+        <h3>4. Envio do Relatório Final</h3>
+        <p>Pendente. Submissão do relatório ainda não realizada.</p>
+      </div>
+
+      <div class="etapa">
+        <h3>5. Avaliação Final</h3>
+        <p>Aguardando conclusão do relatório para análise.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Fatec Itapira – Sistema HAE
+  </div>
+</body>
+</html>

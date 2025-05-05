@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Sistema HAE</title>
+  <style>
+    :root {
+      --cor-primaria: #cc1719;
+      --cor-secundaria: #000000;
+      --cor-fundo: #f4f4f4;
+      --cor-branca: #ffffff;
+      --cor-texto: #333;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+    }
+
+    header {
+      background-color: var(--cor-secundaria);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .banner h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .perfil {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .botao {
+      background-color: var(--cor-primaria);
+      color: white;
+      padding: 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .botao:hover {
+      background-color: #8f1011;
+      transform: translateY(-3px);
+    }
+
+    .botao.vermelho {
+      background-color: #6b0001;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: white;
+      background-color: var(--cor-secundaria);
+      padding: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .menu {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="imagens/logo_sp.jpeg" alt="Logo Governo SP" />
+    <img src="imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
+  </header>
+
+  <div class="banner">
+    <h1>Painel do Usuário</h1>
+  </div>
+
+  <div class="container">
+    <p class="perfil">Você está logado como: <span id="perfilUsuario">Professor</span></p>
+
+    <div id="menuProfessor" class="menu">
+      <a href="formulario.html" class="botao">Preencher Inscrição</a>
+      <a href="realizar-relatorio.html" class="botao">Enviar Relatório Final</a>
+      <a href="metas.html" class="botao">Ver Status da Proposta</a>
+    </div>
+
+    <div id="menuCoordenador" class="menu" style="display: none;">
+      <a href="publicar-documentos.html" class="botao">Publicar Edital</a>
+      <a href="avaliar.html" class="botao">Avaliar Propostas</a>
+    </div>
+
+    <div class="menu">
+      <a href="login.html" class="botao vermelho">Sair do Sistema</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Fatec Itapira – Sistema HAE
+  </div>
+
+  <script>
+    // Alterna entre menus de professor e coordenador com base na URL (?tipo=professor ou ?tipo=coordenador)
+    const params = new URLSearchParams(window.location.search);
+    const tipo = params.get("tipo") || "professor";
+    document.getElementById("perfilUsuario").textContent = tipo === "coordenador" ? "Coordenação" : "Professor";
+    document.getElementById("menuProfessor").style.display = tipo === "professor" ? "grid" : "none";
+    document.getElementById("menuCoordenador").style.display = tipo === "coordenador" ? "grid" : "none";
+  </script>
+</body>
+</html>

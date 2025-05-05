@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Usuário - Sistema HAE</title>
+  <style>
+    :root {
+      --cor-primaria: #cc1719;
+      --cor-secundaria: #000000;
+      --cor-fundo: #f4f4f4;
+      --cor-branca: #ffffff;
+      --cor-texto: #333;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+    }
+
+    header {
+      background-color: var(--cor-secundaria);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .banner h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .form-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: var(--cor-branca);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--cor-primaria);
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 30px;
+      padding: 14px;
+      background-color: var(--cor-primaria);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #8f1011;
+    }
+
+    .voltar-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .voltar-link a {
+      color: var(--cor-primaria);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .voltar-link a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: white;
+      background-color: var(--cor-secundaria);
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="imagens/logo_sp.jpeg" alt="Logo Governo SP" />
+    <img src="imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
+  </header>
+
+  <div class="banner">
+    <h1>Cadastro de Usuário</h1>
+  </div>
+
+  <div class="form-container">
+    <h2>Crie sua conta no Sistema HAE</h2>
+    <form>
+      <label for="perfil">Perfil</label>
+      <select id="perfil" required>
+        <option value="">Selecione...</option>
+        <option value="professor">Professor</option>
+        <option value="coordenador">Coordenação</option>
+      </select>
+
+      <label for="nome">Nome Completo</label>
+      <input type="text" id="nome" placeholder="Digite seu nome" required>
+
+      <label for="email">Email Institucional</label>
+      <input type="email" id="email" placeholder="exemplo@fatec.sp.gov.br" required>
+
+      <label for="usuario">Usuário</label>
+      <input type="text" id="usuario" placeholder="Nome de usuário desejado" required>
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Crie uma senha" required>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+
+    <div class="voltar-link">
+      <p>Já possui conta? <a href="login.html">Voltar para login</a></p>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Fatec Itapira – Sistema HAE
+  </div>
+</body>
+</html>

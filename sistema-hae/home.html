@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal HAE – Fatec Itapira</title>
+  <style>
+    :root {
+      --cor-primaria: #cc1719;
+      --cor-secundaria: #000000;
+      --cor-fundo: #f4f4f4;
+      --cor-branca: #ffffff;
+      --cor-texto: #333;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+    }
+
+    header {
+      background-color: var(--cor-secundaria);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 40px;
+      flex-wrap: wrap;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .banner h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--cor-branca);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 30px 20px;
+      text-decoration: none;
+      color: var(--cor-texto);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+      height: 60px;
+      margin-bottom: 15px;
+    }
+
+    .card h2 {
+      margin: 10px 0;
+      color: var(--cor-primaria);
+    }
+
+    .card p {
+      font-size: 14px;
+    }
+
+    footer {
+      background-color: var(--cor-secundaria);
+      text-align: center;
+      padding: 15px;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="imagens/logo_sp.jpeg" alt="Logo Governo SP" />
+    <img src="imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
+  </header>
+
+  <div class="banner">
+    <h1>Portal de Gestão de HAEs – HAEficiente </h1>
+  </div>
+
+  <div class="container">
+    <a href="login.html" class="card">
+      <img src="https://img.icons8.com/ios-filled/50/login-rounded-right.png" alt="Login">
+      <h2>Login</h2>
+      <p>Acesse sua conta como professor ou coordenador.</p>
+    </a>
+    <a href="formulario.html" class="card">
+      <img src="https://img.icons8.com/ios/50/add-file.png" alt="Inscrição">
+      <h2>Inscrição</h2>
+      <p>Preencha sua ficha de projeto para o semestre atual.</p>
+    </a>
+    <a href="publicar-documentos.html" class="card">
+      <img src="https://img.icons8.com/ios/50/upload-to-cloud.png" alt="Publicar Edital">
+      <h2>Publicar Edital</h2>
+      <p>Área destinada à publicação de editais oficiais.</p>
+    </a>
+    <a href="realizar-relatorio.html" class="card">
+      <img src="https://img.icons8.com/ios/50/task-completed.png" alt="Relatório Final">
+      <h2>Relatório Final</h2>
+      <p>Envie os resultados das atividades realizadas.</p>
+    </a>
+    <a href="metas.html" class="card">
+      <img src="https://img.icons8.com/ios/50/inspection.png" alt="Status e Resultados">
+      <h2>Status e Resultados</h2>
+      <p>Acompanhe o andamento da sua proposta.</p>
+    </a>
+  </div>
+
+  <footer>
+    &copy; 2025 Fatec Itapira – Sistema de Gestão de HAEs
+  </footer>
+</body>
+</html>
