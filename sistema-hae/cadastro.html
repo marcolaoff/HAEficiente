@@ -4,21 +4,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro de Usuário - Sistema HAE</title>
+  <title>Cadastro - Sistema HAE</title>
   <style>
     :root {
       --cor-primaria: #cc1719;
       --cor-secundaria: #000000;
       --cor-fundo: #f4f4f4;
       --cor-branca: #ffffff;
-      --cor-texto: #333;
     }
 
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--cor-fundo);
-      color: var(--cor-texto);
+      color: #333;
     }
 
     header {
@@ -46,11 +45,11 @@
     }
 
     .form-container {
-      max-width: 600px;
+      max-width: 500px;
       margin: 40px auto;
       background-color: var(--cor-branca);
       padding: 40px;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
 
@@ -92,21 +91,6 @@
       background-color: #8f1011;
     }
 
-    .voltar-link {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .voltar-link a {
-      color: var(--cor-primaria);
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .voltar-link a:hover {
-      text-decoration: underline;
-    }
-
     .footer {
       text-align: center;
       margin-top: 40px;
@@ -128,37 +112,48 @@
   </div>
 
   <div class="form-container">
-    <h2>Crie sua conta no Sistema HAE</h2>
-    <form>
-      <label for="perfil">Perfil</label>
-      <select id="perfil" required>
-        <option value="">Selecione...</option>
-        <option value="professor">Professor</option>
-        <option value="coordenador">Coordenação</option>
-      </select>
-
+    <h2>Preencha seus dados</h2>
+    <form method="POST" action="cadastro.php">
       <label for="nome">Nome Completo</label>
-      <input type="text" id="nome" placeholder="Digite seu nome" required>
+      <input type="text" name="nome" id="nome" required />
 
-      <label for="email">Email Institucional</label>
-      <input type="email" id="email" placeholder="exemplo@fatec.sp.gov.br" required>
+      <label for="email">E-mail Institucional</label>
+      <input type="email" name="email" id="email" required />
+
+      <label for="telefone">Telefone</label>
+      <input type="text" name="telefone" id="telefone" />
 
       <label for="usuario">Usuário</label>
-      <input type="text" id="usuario" placeholder="Nome de usuário desejado" required>
+      <input type="text" name="usuario" id="usuario" required />
 
       <label for="senha">Senha</label>
-      <input type="password" id="senha" placeholder="Crie uma senha" required>
+      <input type="password" name="senha" id="senha" required />
+
+      <label for="perfil">Tipo de Cadastro</label>
+      <select name="perfil" id="perfil" required>
+        <option value="">Selecione...</option>
+        <option value="professor">Professor</option>
+        <option value="coordenador">Coordenador</option>
+      </select>
 
       <button type="submit">Cadastrar</button>
     </form>
-
-    <div class="voltar-link">
-      <p>Já possui conta? <a href="login.html">Voltar para login</a></p>
-    </div>
   </div>
 
   <div class="footer">
     &copy; 2025 Fatec Itapira – Sistema HAE
   </div>
+
+<script>
+  // Máscara para telefone (formato (XX) XXXXX-XXXX)
+  document.getElementById('telefone').addEventListener('input', function (e) {
+    let x = e.target.value.replace(/\D/g, '').slice(0, 11);
+    if (x.length >= 2 && x.length <= 6)
+      x = `(${x.slice(0, 2)}) ${x.slice(2)}`;
+    else if (x.length > 6)
+      x = `(${x.slice(0, 2)}) ${x.slice(2, 7)}-${x.slice(7)}`;
+    e.target.value = x;
+  });
+</script>
 </body>
 </html>
