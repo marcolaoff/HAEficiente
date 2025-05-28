@@ -1,11 +1,14 @@
 
 <?php
 session_start();
-if (!isset($_SESSION["id"]) || $_SESSION["perfil"] !== "professor") {
-    header("Location: {$base_url}/login.html");
+
+// Corrigir o nome da variável de sessão
+if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
+    header("Location: ../../login.html"); // Use caminho absoluto relativo
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">

@@ -115,7 +115,7 @@ session_start();
     <div class="icone">✅</div>
     <h2>Inscrição Realizada com Sucesso!</h2>
     <p>Sua proposta foi registrada e será avaliada pela coordenação da Fatec Itapira. Acompanhe o status pelo seu painel.</p>
-    <a href="dashboard.html?tipo=professor" class="btn-voltar">Voltar para o Painel</a>
+    <a href="dashboard.php?tipo=professor" class="btn-voltar">Voltar para o Painel</a>
   </div>
 
   <div class="footer">

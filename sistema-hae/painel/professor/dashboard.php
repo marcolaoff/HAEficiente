@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if (!isset($_SESSION["perfil"])) {
@@ -47,11 +46,6 @@ $perfil = $_SESSION["perfil"];
       padding: 30px 20px;
       background-color: var(--cor-primaria);
       color: white;
-    }
-
-    .banner h1 {
-      margin: 0;
-      font-size: 26px;
     }
 
     .container {
@@ -106,12 +100,6 @@ $perfil = $_SESSION["perfil"];
       background-color: var(--cor-secundaria);
       padding: 15px;
     }
-
-    @media (max-width: 600px) {
-      .menu {
-        grid-template-columns: 1fr;
-      }
-    }
   </style>
 </head>
 <body>
@@ -129,14 +117,14 @@ $perfil = $_SESSION["perfil"];
 
     <?php if ($perfil === "professor"): ?>
     <div class="menu">
-      <a href="formulario.html" class="botao">Preencher Inscrição</a>
+      <a href="formulario.php" class="botao">Preencher Inscrição</a>
       <a href="realizar-relatorio.php" class="botao">Enviar Relatório Final</a>
       <a href="metas.php" class="botao">Ver Status da Proposta</a>
     </div>
     <?php elseif ($perfil === "coordenador"): ?>
     <div class="menu">
-      <a href="painel/professor/publicar-documentos.php" class="botao">Publicar Edital</a>
-      <a href="painel/professor/avaliar.php" class="botao">Avaliar Propostas</a>
+      <a href="../coordenador/publicar-documentos.php" class="botao">Publicar Edital</a>
+      <a href="../coordenador/avaliar.php" class="botao">Avaliar Propostas</a>
     </div>
     <?php elseif ($perfil === "admin"): ?>
     <div class="menu">
