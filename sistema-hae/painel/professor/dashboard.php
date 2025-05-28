@@ -129,7 +129,7 @@ $perfil = $_SESSION["perfil"];
 
     <?php if ($perfil === "professor"): ?>
     <div class="menu">
-      <a href="formulario.php" class="botao">Preencher Inscrição</a>
+      <a href="formulario.html" class="botao">Preencher Inscrição</a>
       <a href="realizar-relatorio.php" class="botao">Enviar Relatório Final</a>
       <a href="metas.php" class="botao">Ver Status da Proposta</a>
     </div>
