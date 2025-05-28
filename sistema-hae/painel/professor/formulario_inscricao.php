@@ -1,11 +1,12 @@
 <?php
-require_once "../../config.php";
 session_start();
-
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../../login.php");
+require_once "../../config.php"; // Caminho relativo à raiz do projeto
+if (!isset($_SESSION["id"])) {
+    header("Location: {$base_url}/login.html");
     exit();
 }
+?>
+
 
 // Buscar editais ativos
 $editais = [];

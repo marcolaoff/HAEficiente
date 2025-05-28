@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -13,33 +12,33 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $usuario = $_POST["usuario"];
-    $senha = $_POST["senha"];
+    $usuario_login = $_POST["usuario"];
+    $senha_login = $_POST["senha"];
 
     $stmt = $conn->prepare("SELECT id, nome, perfil, senha, aprovado, status FROM usuarios WHERE usuario = ?");
-    $stmt->bind_param("s", $usuario);
+    $stmt->bind_param("s", $usuario_login);
     $stmt->execute();
     $resultado = $stmt->get_result();
 
     if ($resultado->num_rows === 1) {
         $dados = $resultado->fetch_assoc();
 
-        if ($senha === $dados["senha"]) {
+        if (password_verify($senha_login, $dados["senha"])) {
             if ($dados["status"] === "inativo") {
                 echo "Usuário inativo. Contate o administrador.";
             } elseif ($dados["perfil"] === "coordenador" && $dados["aprovado"] == 0) {
                 echo "Aguardando aprovação do administrador.";
             } else {
-                $_SESSION["id"] = $dados["id"];
-                $_SESSION["nome"] = $dados["nome"];
+                $_SESSION["usuario_id"] = $dados["id"];
+                $_SESSION["usuario_nome"] = $dados["nome"];
                 $_SESSION["perfil"] = $dados["perfil"];
 
                 if ($dados["perfil"] === "professor") {
-                    header("Location: dashboard.html?tipo=professor");
+                    header("Location: painel/professor/dashboard.php");
                 } elseif ($dados["perfil"] === "coordenador") {
-                    header("Location: dashboard.html?tipo=coordenador");
+                    header("Location: painel/coordenador/dashboard.php");
                 } elseif ($dados["perfil"] === "admin") {
-                    header("Location: admin_painel.html");
+                    header("Location: painel/admin/admin_painel.php");
                 }
                 exit();
             }

@@ -1,11 +1,8 @@
-
 <?php
-$host = "localhost";
-$usuario = "root";
-$senha = "";
-$banco = "sistema_hae";
+require_once "config.php";
+session_start();
 
-$conn = new mysqli($host, $usuario, $senha, $banco);
+$conn = new mysqli("localhost", "root", "", "sistema_hae");
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
@@ -15,27 +12,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nome = $_POST["nome"];
     $email = $_POST["email"];
     $usuario = $_POST["usuario"];
-    $senha = $_POST["senha"];
+    $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT);
     $telefone = $_POST["telefone"];
 
-    // Verificar se já existe
     $check = $conn->prepare("SELECT id FROM usuarios WHERE usuario = ? OR email = ?");
     $check->bind_param("ss", $usuario, $email);
     $check->execute();
     $check->store_result();
 
     if ($check->num_rows > 0) {
-        echo "Usuário ou email já cadastrado.";
+        echo "<script>alert('Usuário ou email já cadastrado.'); window.location.href='cadastro.html';</script>";
     } else {
-        $aprovado = $perfil === "coordenador" ? 0 : 1;
+        $aprovado = ($perfil === "coordenador") ? 0 : 1;
 
-        $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, usuario, senha, perfil, aprovado, telefone) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, usuario, senha, perfil, aprovado, telefone) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssis", $nome, $email, $usuario, $senha, $perfil, $aprovado, $telefone);
-        
+
         if ($stmt->execute()) {
-            echo "Cadastro realizado com sucesso.";
+            echo "<script>alert('Cadastro realizado com sucesso!'); window.location.href='login.html';</script>";
         } else {
-            echo "Erro ao cadastrar.";
+            echo "<script>alert('Erro ao cadastrar.'); window.location.href='cadastro.html';</script>";
         }
 
         $stmt->close();
