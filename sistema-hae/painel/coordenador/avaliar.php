@@ -1,0 +1,177 @@
+<?php
+require_once "../../config.php";
+session_start();
+// TODO: Adicionar verificação de sessão e carregar dados do banco se necessário
+?>
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avaliação de Propostas - Sistema HAE</title>
+  <style>
+    :root {
+      --cor-primaria: #cc1719;
+      --cor-secundaria: #000000;
+      --cor-fundo: #f4f4f4;
+      --cor-branca: #ffffff;
+      --cor-texto: #333;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+    }
+
+    header {
+      background-color: var(--cor-secundaria);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .banner h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      background-color: var(--cor-branca);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .projeto-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      background-color: #fff;
+    }
+
+    .projeto-card h2 {
+      color: var(--cor-primaria);
+      margin-top: 0;
+    }
+
+    .info {
+      font-size: 14px;
+      margin: 6px 0;
+    }
+
+    .status-select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn-salvar {
+      background-color: var(--cor-primaria);
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-salvar:hover {
+      background-color: #8f1011;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: white;
+      background-color: var(--cor-secundaria);
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="imagens/logo_sp.jpeg" alt="Logo Governo SP" />
+    <img src="imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
+  </header>
+
+  <div class="banner">
+    <h1>Avaliação de Propostas HAE</h1>
+  </div>
+
+  <div class="container">
+    <div class="projeto-card">
+      <h2>Projeto: Chatbot Educacional com IA</h2>
+      <p class="info"><strong>Professor:</strong> Maria Oliveira</p>
+      <p class="info"><strong>Curso:</strong> Desenvolvimento de Software Multiplataforma</p>
+      <p class="info"><strong>Resumo:</strong> Desenvolvimento de um assistente virtual para apoiar alunos com dúvidas frequentes, integrado ao site da Fatec.</p>
+
+      <label for="status1">Status da Avaliação:</label>
+      <select class="status-select" id="status1">
+        <option value="pendente">Em Análise</option>
+        <option value="aprovado">Aprovado</option>
+        <option value="parcial">Aprovado com Ressalvas</option>
+        <option value="rejeitado">Rejeitado</option>
+      </select>
+
+      <label for="comentario1">Comentário da Coordenação:</label>
+      <textarea id="comentario1" placeholder="Escreva sua justificativa ou observações..."></textarea>
+
+      <button class="btn-salvar">Salvar Avaliação</button>
+    </div>
+
+    <div class="projeto-card">
+      <h2>Projeto: Painel Acadêmico com Power BI</h2>
+      <p class="info"><strong>Professor:</strong> Lucas Andrade</p>
+      <p class="info"><strong>Curso:</strong> Gestão Empresarial</p>
+      <p class="info"><strong>Resumo:</strong> Criação de dashboards para acompanhamento de desempenho acadêmico da unidade e apoio à gestão estratégica.</p>
+
+      <label for="status2">Status da Avaliação:</label>
+      <select class="status-select" id="status2">
+        <option value="pendente">Em Análise</option>
+        <option value="aprovado">Aprovado</option>
+        <option value="parcial">Aprovado com Ressalvas</option>
+        <option value="rejeitado">Rejeitado</option>
+      </select>
+
+      <label for="comentario2">Comentário da Coordenação:</label>
+      <textarea id="comentario2" placeholder="Escreva sua justificativa ou observações..."></textarea>
+
+      <button class="btn-salvar">Salvar Avaliação</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Fatec Itapira – Sistema HAE
+  </div>
+</body>
+</html>

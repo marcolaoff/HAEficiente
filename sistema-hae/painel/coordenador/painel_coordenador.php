@@ -1,0 +1,186 @@
+<?php
+require_once "../../config.php";
+session_start();
+// TODO: Adicionar verificação de sessão e carregar dados do banco se necessário
+?>
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel Coordenador - Sistema HAE</title>
+  <style>
+    :root {
+      --cor-primaria: #cc1719;
+      --cor-secundaria: #000000;
+      --cor-fundo: #f4f4f4;
+      --cor-branca: #ffffff;
+      --cor-texto: #333;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+    }
+
+    header {
+      background-color: var(--cor-secundaria);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .banner h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      background-color: var(--cor-branca);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: var(--cor-primaria);
+      margin-bottom: 20px;
+    }
+
+    .btn-publicar {
+      display: inline-block;
+      background-color: var(--cor-primaria);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .aceitar { background-color: #2e7d32; }
+    .rejeitar { background-color: #c62828; }
+    .propor { background-color: #f9a825; }
+    .avaliar { background-color: #0277bd; }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: white;
+      background-color: var(--cor-secundaria);
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo_sp.png" alt="Logo Governo SP" />
+    <img src="logo_fatec.png" alt="Logo Fatec Itapira" />
+  </header>
+
+  <div class="banner">
+    <h1>Painel do Coordenador</h1>
+  </div>
+
+  <div class="container">
+    <a href="publicar-documentos.html" class="btn-publicar">📄 Publicar Edital</a>
+
+    <h2>Inscrições Recebidas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Professor</th>
+          <th>Título</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>João da Silva</td>
+          <td>Plataforma de Gestão Acadêmica</td>
+          <td>Pendente</td>
+          <td>
+            <button class="btn aceitar">Aceitar</button>
+            <button class="btn rejeitar">Rejeitar</button>
+            <button class="btn propor">Propor Alteração</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Relatórios Finais</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Professor</th>
+          <th>Projeto</th>
+          <th>Data de Envio</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ana Paula</td>
+          <td>Indicadores de Desempenho</td>
+          <td>20/06/2025</td>
+          <td>
+            <button class="btn avaliar">Avaliar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Fatec Itapira – Sistema HAE
+  </div>
+</body>
+</html>
