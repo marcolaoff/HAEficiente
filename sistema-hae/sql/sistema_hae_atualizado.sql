@@ -50,3 +50,19 @@ CREATE TABLE editais (
     arquivo_pdf VARCHAR(255),
     data_publicacao DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+
+CREATE TABLE IF NOT EXISTS inscricoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    edital_id INT NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    arquivo_pdf VARCHAR(255),
+    status VARCHAR(20) DEFAULT 'pendente',
+    comentario_coordenador TEXT DEFAULT NULL,
+    data_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (edital_id) REFERENCES editais(id)
+);
+
