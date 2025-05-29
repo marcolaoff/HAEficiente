@@ -1,9 +1,12 @@
 <?php
 require_once "../../config.php";
 session_start();
-// TODO: Adicionar verificação de sessão e carregar dados do banco se necessário
-?>
 
+if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
+    header("Location: ../../login.html");
+    exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -101,6 +104,12 @@ session_start();
       background-color: #8f1011;
     }
 
+    .btn-voltar {
+      width: 100%;
+      margin-top: 10px;
+      background-color: var(--cor-secundaria);
+    }
+
     .footer {
       text-align: center;
       margin-top: 40px;
@@ -137,6 +146,10 @@ session_start();
       <input type="file" id="anexo" name="anexo" accept=".pdf" required />
 
       <button type="submit">Enviar Relatório</button>
+    </form>
+
+    <form action="dashboard.php" method="get">
+      <button type="submit" class="btn-voltar">Voltar para o Painel</button>
     </form>
   </div>
 

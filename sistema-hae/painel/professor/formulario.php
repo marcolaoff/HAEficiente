@@ -106,7 +106,11 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
     button:hover {
       background-color: #8f1011;
     }
-
+    .btn-voltar {
+      width: 100%;
+      margin-top: 10px;
+      background-color: var(--cor-secundaria);
+    }
     .footer {
       text-align: center;
       margin-top: 40px;
@@ -146,6 +150,9 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
       <input type="file" id="arquivo_pdf" name="arquivo_pdf" accept=".pdf">
 
       <button type="submit">Enviar Inscrição</button>
+    </form>
+    <form action="dashboard.php" method="get">
+      <button type="submit" class="btn-voltar">Voltar para o Painel</button>
     </form>
   </div>
 

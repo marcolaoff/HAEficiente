@@ -1,9 +1,25 @@
 <?php
 require_once "../../config.php";
 session_start();
-// TODO: Adicionar verificação de sessão e carregar dados do banco se necessário
-?>
 
+// Redireciona se não estiver logado como professor
+if (!isset($_SESSION['usuario_id']) || $_SESSION['perfil'] !== 'professor') {
+    header("Location: ../../login.html");
+    exit();
+}
+
+$usuario_id = $_SESSION['usuario_id'];
+$inscricoes = [];
+
+$stmt = $conn->prepare("SELECT titulo, data_envio, status, observacoes FROM inscricoes WHERE usuario_id = ?");
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    $inscricoes[] = $row;
+}
+$stmt->close();
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -48,11 +64,6 @@ session_start();
       padding: 30px 20px;
       background-color: var(--cor-primaria);
       color: white;
-    }
-
-    .banner h1 {
-      margin: 0;
-      font-size: 26px;
     }
 
     .container {
@@ -121,6 +132,22 @@ session_start();
       color: var(--cor-aviso);
     }
 
+    .btn-voltar {
+      margin-top: 30px;
+      width: 100%;
+      background-color: var(--cor-secundaria);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-voltar:hover {
+      background-color: #333;
+    }
+
     .footer {
       text-align: center;
       margin-top: 40px;
@@ -139,8 +166,8 @@ session_start();
 </head>
 <body>
   <header>
-    <img src="imagens/logo_sp.jpeg" alt="Logo Governo SP" />
-    <img src="imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
+    <img src="../../imagens/logo_sp.jpeg" alt="Logo Governo SP" />
+    <img src="../../imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
   </header>
 
   <div class="banner">
@@ -161,32 +188,27 @@ session_start();
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Desenvolvimento de Plataforma para HAE</td>
-          <td>10/03/2025</td>
-          <td><span class="status aprovado">Aprovado</span></td>
-          <td>Atende todos os requisitos do edital.</td>
-        </tr>
-        <tr>
-          <td>Sistema de Agendamento Acadêmico</td>
-          <td>11/03/2025</td>
-          <td><span class="status parcial">Aprovado com Ressalvas</span></td>
-          <td>Ajustar escopo das atividades propostas.</td>
-        </tr>
-        <tr>
-          <td>Integração de Dados da Fatec</td>
-          <td>12/03/2025</td>
-          <td><span class="status rejeitado">Rejeitado</span></td>
-          <td>Não condiz com os objetivos do edital.</td>
-        </tr>
-        <tr>
-          <td>Desenvolvimento de Chatbot Educacional</td>
-          <td>15/03/2025</td>
-          <td><span class="status pendente">Em Análise</span></td>
-          <td>Aguardando parecer da coordenação.</td>
-        </tr>
+        <?php foreach ($inscricoes as $inscricao): ?>
+          <tr>
+            <td><?= htmlspecialchars($inscricao['titulo']) ?></td>
+            <td><?= date('d/m/Y', strtotime($inscricao['data_envio'])) ?></td>
+            <td>
+              <span class="status 
+                <?= $inscricao['status'] === 'aprovado' ? 'aprovado' :
+                    ($inscricao['status'] === 'rejeitado' ? 'rejeitado' :
+                    ($inscricao['status'] === 'parcial' ? 'parcial' : 'pendente')) ?>">
+                <?= ucfirst($inscricao['status']) ?>
+              </span>
+            </td>
+            <td><?= htmlspecialchars($inscricao['observacoes'] ?? '-') ?></td>
+          </tr>
+        <?php endforeach; ?>
       </tbody>
     </table>
+
+    <form action="dashboard.php" method="get">
+      <button type="submit" class="btn-voltar">Voltar para o Painel</button>
+    </form>
   </div>
 
   <div class="footer">

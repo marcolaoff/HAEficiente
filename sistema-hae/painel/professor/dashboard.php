@@ -13,6 +13,7 @@ $perfil = $_SESSION["perfil"];
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard - Sistema HAE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     :root {
       --cor-primaria: #cc1719;
@@ -43,9 +44,23 @@ $perfil = $_SESSION["perfil"];
 
     .banner {
       text-align: center;
-      padding: 30px 20px;
+      padding: 30px 20px 10px;
       background-color: var(--cor-primaria);
       color: white;
+    }
+
+    .banner h1 {
+      margin: 10px 0;
+      font-size: 26px;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .logo-container img {
+      height: 80px;
     }
 
     .container {
@@ -57,35 +72,43 @@ $perfil = $_SESSION["perfil"];
     .perfil {
       text-align: center;
       font-weight: bold;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
+      font-size: 18px;
       color: #555;
     }
 
     .menu {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
+      gap: 25px;
+      margin-bottom: 40px;
     }
 
     .botao {
       background-color: var(--cor-primaria);
       color: white;
-      padding: 20px;
+      padding: 25px 20px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 16px;
-      cursor: pointer;
       text-align: center;
       text-decoration: none;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .botao i {
+      font-size: 24px;
+      margin-bottom: 10px;
     }
 
     .botao:hover {
       background-color: #8f1011;
-      transform: translateY(-3px);
+      transform: translateY(-4px);
     }
 
     .botao.vermelho {
@@ -94,7 +117,6 @@ $perfil = $_SESSION["perfil"];
 
     .footer {
       text-align: center;
-      margin-top: 40px;
       font-size: 13px;
       color: white;
       background-color: var(--cor-secundaria);
@@ -112,29 +134,30 @@ $perfil = $_SESSION["perfil"];
     <h1>Painel do Usuário</h1>
   </div>
 
+
   <div class="container">
     <p class="perfil">Você está logado como: <?php echo ucfirst($perfil); ?></p>
 
     <?php if ($perfil === "professor"): ?>
     <div class="menu">
-      <a href="formulario.php" class="botao">Preencher Inscrição</a>
-      <a href="realizar-relatorio.php" class="botao">Enviar Relatório Final</a>
-      <a href="metas.php" class="botao">Ver Status da Proposta</a>
+      <a href="formulario.php" class="botao"><i class="fas fa-file-alt"></i>Preencher Inscrição</a>
+      <a href="realizar-relatorio.php" class="botao"><i class="fas fa-upload"></i>Enviar Relatório Final</a>
+      <a href="metas.php" class="botao"><i class="fas fa-chart-line"></i>Ver Status da Proposta</a>
     </div>
     <?php elseif ($perfil === "coordenador"): ?>
     <div class="menu">
-      <a href="../coordenador/publicar-documentos.php" class="botao">Publicar Edital</a>
-      <a href="../coordenador/avaliar.php" class="botao">Avaliar Propostas</a>
+      <a href="../coordenador/publicar-documentos.php" class="botao"><i class="fas fa-bullhorn"></i>Publicar Edital</a>
+      <a href="../coordenador/avaliar.php" class="botao"><i class="fas fa-check-circle"></i>Avaliar Propostas</a>
     </div>
     <?php elseif ($perfil === "admin"): ?>
     <div class="menu">
-      <a href="../../admin/aprovar_coordenadores.php" class="botao">Aprovar Coordenadores</a>
-      <a href="../../admin/gerenciar_usuarios.php" class="botao">Gerenciar Usuários</a>
+      <a href="../../admin/aprovar_coordenadores.php" class="botao"><i class="fas fa-user-check"></i>Aprovar Coordenadores</a>
+      <a href="../../admin/gerenciar_usuarios.php" class="botao"><i class="fas fa-users-cog"></i>Gerenciar Usuários</a>
     </div>
     <?php endif; ?>
 
     <div class="menu">
-      <a href="../../logout.php" class="botao vermelho">Sair do Sistema</a>
+      <a href="../../logout.php" class="botao vermelho"><i class="fas fa-sign-out-alt"></i>Sair do Sistema</a>
     </div>
   </div>
 
