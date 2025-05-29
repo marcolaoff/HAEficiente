@@ -123,8 +123,8 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
 </head>
 <body>
   <header>
-    <img src="imagens/logo_sp.jpeg" alt="Logo Governo SP" />
-    <img src="imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
+    <img src="../../imagens/logo_sp.jpeg" alt="Logo Governo SP" />
+    <img src="../../imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
   </header>
 
   <div class="banner">
