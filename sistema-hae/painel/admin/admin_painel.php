@@ -170,6 +170,13 @@ $usuarios = $conn->query("SELECT id, nome, email, perfil, status, aprovado FROM 
       </tbody>
     </table>
   </div>
+<div style="text-align: center; margin: 30px 0;">
+  <a href="../../logout.php" style="text-decoration: none;">
+    <button class="btn inativar" style="padding: 12px 20px; font-size: 16px;">
+      Sair do Sistema
+    </button>
+  </a>
+</div>
 
   <div class="footer">
     &copy; 2025 Fatec Itapira – Sistema HAE

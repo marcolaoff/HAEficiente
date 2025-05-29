@@ -4,8 +4,24 @@ if (!isset($_SESSION["perfil"]) || !isset($_SESSION["usuario_nome"])) {
     header("Location: /HAEficiente/sistema-hae/login.html");
     exit();
 }
+
+require_once "../../config.php";
+
 $perfil = $_SESSION["perfil"];
 $nome = $_SESSION["usuario_nome"];
+$usuario_id = $_SESSION["usuario_id"] ?? 0;
+
+$propostas = [];
+if ($perfil === "professor" && $usuario_id) {
+    $stmt = $conn->prepare("SELECT titulo, data_envio, status FROM inscricoes WHERE usuario_id = ? ORDER BY data_envio DESC");
+    $stmt->bind_param("i", $usuario_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $propostas[] = $row;
+    }
+    $stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -126,6 +142,23 @@ $nome = $_SESSION["usuario_nome"];
       background-color: #6b0001;
     }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
     .footer {
       text-align: center;
       font-size: 13px;
@@ -142,7 +175,7 @@ $nome = $_SESSION["usuario_nome"];
   </header>
 
   <div class="banner">
-    <h1>Painel do Professor </h1>
+    <h1>Painel do Coordenador</h1>
   </div>
 
   <div class="container">
@@ -172,6 +205,42 @@ $nome = $_SESSION["usuario_nome"];
     <div class="menu">
       <a href="../../logout.php" class="botao vermelho"><i class="fas fa-sign-out-alt"></i>Sair do Sistema</a>
     </div>
+
+    <?php if ($perfil === "professor" && !empty($propostas)): ?>
+    <div style="margin-top: 40px;">
+      <h2 style="text-align:center; color: var(--cor-primaria);">Minhas Propostas</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Data de Envio</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($propostas as $p): ?>
+          <tr>
+            <td><?= htmlspecialchars($p['titulo']) ?></td>
+            <td><?= date('d/m/Y', strtotime($p['data_envio'])) ?></td>
+            <td>
+              <?php
+                $status = ucfirst($p['status']);
+                $color = match($p['status']) {
+                  'aprovado' => 'green',
+                  'rejeitado' => 'red',
+                  'pendente' => '#0277bd',
+                  'parcial' => '#f9a825',
+                  default => '#666'
+                };
+              ?>
+              <span style="color: <?= $color ?>; font-weight: bold;"><?= $status ?></span>
+            </td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+    <?php endif; ?>
   </div>
 
   <div class="footer">
