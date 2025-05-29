@@ -194,6 +194,7 @@ if ($perfil === "professor" && $usuario_id) {
     <div class="menu">
       <a href="../coordenador/publicar-documentos.php" class="botao"><i class="fas fa-bullhorn"></i>Publicar Edital</a>
       <a href="../coordenador/avaliar.php" class="botao"><i class="fas fa-check-circle"></i>Avaliar Propostas</a>
+      <a href="../coordenador/inscricoes.php" class="botao"><i class="fas fa-folder-open"></i> Ver Inscrições</a>
     </div>
     <?php elseif ($perfil === "admin"): ?>
     <div class="menu">
