@@ -1,9 +1,43 @@
 <?php
 require_once "../../config.php";
 session_start();
-// TODO: Adicionar verificação de sessão e carregar dados do banco se necessário
-?>
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $titulo = $_POST['titulo'] ?? '';
+    $descricao = $_POST['descricao'] ?? '';
+
+    if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) {
+        $arquivoTmp = $_FILES['arquivo']['tmp_name'];
+        $nomeOriginal = $_FILES['arquivo']['name'];
+        $extensao = strtolower(pathinfo($nomeOriginal, PATHINFO_EXTENSION));
+
+        if ($extensao === 'pdf') {
+            $novoNome = uniqid('edital_', true) . '.pdf';
+            $caminho = '../../arquivos/' . $novoNome;
+
+            if (!is_dir('../../arquivos')) {
+                mkdir('../../arquivos', 0755, true);
+            }
+
+            if (move_uploaded_file($arquivoTmp, $caminho)) {
+                $stmt = $conn->prepare("INSERT INTO editais (titulo, descricao, nome_arquivo, data_publicacao, ativo) VALUES (?, ?, ?, NOW(), 1)");
+                $stmt->bind_param("sss", $titulo, $descricao, $novoNome);
+                $stmt->execute();
+                $stmt->close();
+
+                header("Location: confirmacao-edital.php");
+                exit;
+            } else {
+                $erro = "Erro ao mover o arquivo.";
+            }
+        } else {
+            $erro = "Somente arquivos PDF são permitidos.";
+        }
+    } else {
+        $erro = "Erro no envio do arquivo.";
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -112,6 +146,12 @@ session_start();
       background-color: var(--cor-secundaria);
       padding: 15px;
     }
+
+    .erro {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -126,7 +166,12 @@ session_start();
 
   <div class="container">
     <h2>Cadastro de Edital de HAEs</h2>
-    <form>
+
+    <?php if (isset($erro)): ?>
+      <div class="erro"><?= htmlspecialchars($erro) ?></div>
+    <?php endif; ?>
+
+    <form action="" method="POST" enctype="multipart/form-data">
       <label for="titulo">Título do Edital</label>
       <input type="text" id="titulo" name="titulo" placeholder="Ex: Edital HAE 2025 - 1º Semestre" required />
 
