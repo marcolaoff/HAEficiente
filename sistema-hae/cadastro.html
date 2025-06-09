@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -74,9 +73,15 @@
       box-sizing: border-box;
     }
 
+    .erro {
+      color: red;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
     button {
       width: 100%;
-      margin-top: 30px;
+      margin-top: 20px;
       padding: 14px;
       background-color: var(--cor-primaria);
       color: white;
@@ -113,7 +118,7 @@
 
   <div class="form-container">
     <h2>Preencha seus dados</h2>
-    <form method="POST" action="cadastro.php">
+    <form method="POST" action="cadastro.php" onsubmit="return validarFormulario()">
       <label for="nome">Nome Completo</label>
       <input type="text" name="nome" id="nome" required />
 
@@ -127,7 +132,12 @@
       <input type="text" name="usuario" id="usuario" required />
 
       <label for="senha">Senha</label>
-      <input type="password" name="senha" id="senha" required />
+      <input type="password" name="senha" id="senha" required minlength="8" />
+
+      <label for="confirmar_senha">Confirmar Senha</label>
+      <input type="password" name="confirmar_senha" id="confirmar_senha" required minlength="8" />
+
+      <div id="mensagem-erro" class="erro"></div>
 
       <label for="perfil">Tipo de Cadastro</label>
       <select name="perfil" id="perfil" required>
@@ -137,6 +147,10 @@
       </select>
 
       <button type="submit">Cadastrar</button>
+
+      <button type="button" onclick="window.location.href='login.html'" style="background-color: var(--cor-secundaria); margin-top: 10px;">
+        Voltar para Login
+      </button>
     </form>
   </div>
 
@@ -145,7 +159,7 @@
   </div>
 
 <script>
-  // Máscara para telefone (formato (XX) XXXXX-XXXX)
+  // Máscara de telefone
   document.getElementById('telefone').addEventListener('input', function (e) {
     let x = e.target.value.replace(/\D/g, '').slice(0, 11);
     if (x.length >= 2 && x.length <= 6)
@@ -154,6 +168,25 @@
       x = `(${x.slice(0, 2)}) ${x.slice(2, 7)}-${x.slice(7)}`;
     e.target.value = x;
   });
+
+  function validarFormulario() {
+    const senha = document.getElementById('senha').value;
+    const confirmarSenha = document.getElementById('confirmar_senha').value;
+    const erroDiv = document.getElementById('mensagem-erro');
+
+    if (senha.length < 8) {
+      erroDiv.textContent = "A senha deve ter pelo menos 8 caracteres.";
+      return false;
+    }
+
+    if (senha !== confirmarSenha) {
+      erroDiv.textContent = "As senhas não coincidem.";
+      return false;
+    }
+
+    erroDiv.textContent = "";
+    return true;
+  }
 </script>
 </body>
 </html>
