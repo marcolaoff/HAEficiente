@@ -2,43 +2,48 @@
 require_once "../../config.php";
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $titulo = $_POST['titulo'] ?? '';
-    $descricao = $_POST['descricao'] ?? '';
+$erro = "";
 
-    if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $titulo = trim($_POST['titulo'] ?? '');
+    $descricao = trim($_POST['descricao'] ?? '');
+
+    if (!empty($titulo) && isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) {
         $arquivoTmp = $_FILES['arquivo']['tmp_name'];
         $nomeOriginal = $_FILES['arquivo']['name'];
         $extensao = strtolower(pathinfo($nomeOriginal, PATHINFO_EXTENSION));
 
         if ($extensao === 'pdf') {
             $novoNome = uniqid('edital_', true) . '.pdf';
-            $caminho = '../../arquivos/' . $novoNome;
+            $pastaArquivos = '../../arquivos/';
+            $caminho = $pastaArquivos . $novoNome;
 
-            if (!is_dir('../../arquivos')) {
-                mkdir('../../arquivos', 0755, true);
+            if (!is_dir($pastaArquivos)) {
+                mkdir($pastaArquivos, 0755, true);
             }
 
             if (move_uploaded_file($arquivoTmp, $caminho)) {
                 $stmt = $conn->prepare("INSERT INTO editais (titulo, descricao, nome_arquivo, data_publicacao, ativo) VALUES (?, ?, ?, NOW(), 1)");
                 $stmt->bind_param("sss", $titulo, $descricao, $novoNome);
-                $stmt->execute();
-                $stmt->close();
 
-                header("Location: confirmacao-edital.php");
-                exit;
+                if ($stmt->execute()) {
+                    $stmt->close();
+                    header("Location: confirmacao-edital.php");
+                    exit;
+                } else {
+                    $erro = "Erro ao salvar no banco de dados.";
+                }
             } else {
-                $erro = "Erro ao mover o arquivo.";
+                $erro = "Erro ao mover o arquivo para a pasta de destino.";
             }
         } else {
-            $erro = "Somente arquivos PDF são permitidos.";
+            $erro = "O arquivo deve ser um PDF.";
         }
     } else {
-        $erro = "Erro no envio do arquivo.";
+        $erro = "Preencha todos os campos obrigatórios e selecione um arquivo válido.";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

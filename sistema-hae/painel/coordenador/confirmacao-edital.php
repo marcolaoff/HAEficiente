@@ -94,7 +94,7 @@ $nome = $_SESSION["usuario_nome"];
   <div class="container">
     <h1>Sucesso!</h1>
     <p>O edital foi publicado com sucesso.</p>
-    <a href="../dashboard.php" class="botao">Voltar ao Painel</a>
+    <a href="../coordenador/dashboard.php" class="botao">Voltar ao Painel</a>
   </div>
 
   <div class="footer">
