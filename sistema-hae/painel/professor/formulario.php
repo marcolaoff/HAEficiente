@@ -1,19 +1,27 @@
-
 <?php
 session_start();
+require_once "../../config.php";
 
-// Corrigir o nome da variável de sessão
 if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
-    header("Location: ../../login.html"); // Use caminho absoluto relativo
+    header("Location: ../../login.html");
     exit();
 }
-?>
 
+// Buscar editais ativos
+$editais = [];
+$sql = "SELECT id, titulo FROM editais WHERE ativo = 1 ORDER BY data_publicacao DESC";
+$result = $conn->query($sql);
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $editais[] = $row;
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscrição - Sistema HAE</title>
   <style>
@@ -50,11 +58,6 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
       color: white;
     }
 
-    .banner h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-
     .form-container {
       max-width: 800px;
       margin: 40px auto;
@@ -64,19 +67,13 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
       box-shadow: 0 5px 25px rgba(0,0,0,0.1);
     }
 
-    h2 {
-      text-align: center;
-      color: var(--cor-primaria);
-      margin-bottom: 30px;
-    }
-
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
     }
 
-    input, textarea {
+    input, select, textarea {
       width: 100%;
       padding: 12px;
       border: 1px solid #ccc;
@@ -106,11 +103,12 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
     button:hover {
       background-color: #8f1011;
     }
+
     .btn-voltar {
-      width: 100%;
-      margin-top: 10px;
       background-color: var(--cor-secundaria);
+      margin-top: 10px;
     }
+
     .footer {
       text-align: center;
       margin-top: 40px;
@@ -132,25 +130,46 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
   </div>
 
   <div class="form-container">
-    <h2>Formulário de Inscrição</h2>
     <form method="POST" action="salvar_inscricao.php" enctype="multipart/form-data">
       <label for="nome">Nome do Professor</label>
-      <input type="text" id="nome" name="nome" value="<?php echo $_SESSION['usuario_nome']; ?>" readonly>
+      <input type="text" id="nome" name="nome" value="<?= htmlspecialchars($_SESSION['usuario_nome']) ?>" readonly>
 
       <label for="telefone">Telefone</label>
-      <input type="text" id="telefone" name="telefone" required>
+      <?php $telefone = $_SESSION['usuario_telefone'] ?? ''; ?>
+      <input type="text" id="telefone" name="telefone" value="<?= htmlspecialchars($telefone) ?>" required>
+
+      <label for="edital_id">Edital</label>
+      <select name="edital_id" id="edital_id" required>
+        <option value="">Selecione um edital</option>
+        <?php foreach ($editais as $edital): ?>
+          <option value="<?= $edital['id'] ?>"><?= htmlspecialchars($edital['titulo']) ?></option>
+        <?php endforeach; ?>
+      </select>
 
       <label for="titulo">Título do Projeto</label>
       <input type="text" id="titulo" name="titulo" required>
 
-      <label for="descricao">Descrição da Proposta</label>
-      <textarea id="descricao" name="descricao" required></textarea>
+      <label for="justificativa">Justificativa</label>
+      <textarea id="justificativa" name="justificativa" required></textarea>
 
-      <label for="arquivo_pdf">Anexar PDF</label>
-      <input type="file" id="arquivo_pdf" name="arquivo_pdf" accept=".pdf">
+      <label for="objetivos">Objetivos</label>
+      <textarea id="objetivos" name="objetivos" required></textarea>
+
+      <label for="metodologia">Metodologia</label>
+      <textarea id="metodologia" name="metodologia" required></textarea>
+
+      <label for="resultados">Resultados Esperados</label>
+      <textarea id="resultados" name="resultados" required></textarea>
+
+      <label for="cronograma">Cronograma de Execução</label>
+      <textarea id="cronograma" name="cronograma" required></textarea>
+
+      <label for="arquivo_pdf">Anexar Proposta em PDF</label>
+      <input type="file" id="arquivo_pdf" name="arquivo_pdf" accept=".pdf" required>
 
       <button type="submit">Enviar Inscrição</button>
     </form>
+
     <form action="dashboard.php" method="get">
       <button type="submit" class="btn-voltar">Voltar para o Painel</button>
     </form>

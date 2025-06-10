@@ -1,3 +1,4 @@
+
 -- Desativar verificação de chave estrangeira para evitar erros de dependência
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -49,29 +50,41 @@ INSERT INTO `usuarios` (`id`, `nome`, `email`, `usuario`, `senha`, `perfil`, `st
 (4, 'marcola', 'marcola@gmail.com', 'marcola', '$2y$10$wLO05W1lIJXpBqIBoKCQmObpbWK1tppgtTrU279rltXmC/5ktzjmy', 'professor', 'ativo', 1, ''),
 (5, 'cleitin', 'cleiton@gmail.com', 'cleitin', '$2y$10$jcvO84nwaFOXpOdVqBLEuuvxuDhOx2e6uV8Mc9uSj6pfP.bwFH.iW', 'coordenador', 'ativo', 1, '(12) 31244-21');
 
--- Tabela inscricoes
+-- Tabela inscricoes atualizada
 CREATE TABLE `inscricoes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `usuario_id` int(11) NOT NULL,
   `edital_id` int(11) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `rg` varchar(50),
+  `matricula` varchar(50),
   `titulo` varchar(255) NOT NULL,
-  `descricao` text NOT NULL,
-  `arquivo_pdf` varchar(255) DEFAULT NULL,
+  `tipo_hae` varchar(100),
+  `quantidade_hae` int,
+  `projeto_interesse` text,
+  `periodo_inicio` date,
+  `periodo_fim` date,
+  `horarios_aula` text,
+  `horario_execucao` text,
+  `metas` text,
+  `objetivos` text,
+  `justificativa` text,
+  `recursos` text,
+  `resultado_esperado` text,
+  `metodologia` text,
+  `cronograma` text,
+  `declaracao_ciencia` boolean DEFAULT 0,
+  `arquivo_pdf` varchar(255),
   `status` varchar(20) DEFAULT 'pendente',
-  `comentario` text DEFAULT NULL,
-  `comentario_coordenador` text DEFAULT NULL,
+  `comentario` text,
+  `comentario_coordenador` text,
   `data_envio` datetime DEFAULT current_timestamp(),
-  `observacoes` text DEFAULT NULL,
+  `observacoes` text,
   PRIMARY KEY (`id`),
-  KEY `usuario_id` (`usuario_id`),
-  KEY `edital_id` (`edital_id`),
-  CONSTRAINT `inscricoes_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`),
-  CONSTRAINT `inscricoes_ibfk_2` FOREIGN KEY (`edital_id`) REFERENCES `editais` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-INSERT INTO `inscricoes` (`id`, `usuario_id`, `edital_id`, `titulo`, `descricao`, `arquivo_pdf`, `status`, `comentario`, `comentario_coordenador`, `data_envio`, `observacoes`) VALUES
-(3, 4, 1, '4124', 'dsadsad', '', 'pendente', NULL, NULL, '2025-05-28 13:12:42', NULL),
-(4, 4, 1, '41234124124', '31312312', '', 'parcial', 'dasdasda', NULL, '2025-05-28 20:45:54', NULL);
+  FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`),
+  FOREIGN KEY (`edital_id`) REFERENCES `editais` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela propostas
 CREATE TABLE `propostas` (
@@ -91,7 +104,7 @@ CREATE TABLE `propostas` (
   KEY `edital_id` (`edital_id`),
   CONSTRAINT `propostas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
   CONSTRAINT `propostas_ibfk_2` FOREIGN KEY (`edital_id`) REFERENCES `editais` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela relatorios
 CREATE TABLE `relatorios` (
