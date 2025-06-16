@@ -25,98 +25,19 @@ if ($result && $result->num_rows > 0) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscrição - Sistema HAE</title>
   <style>
-    :root {
-      --cor-primaria: #cc1719;
-      --cor-secundaria: #000000;
-      --cor-fundo: #f4f4f4;
-      --cor-branca: #ffffff;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--cor-fundo);
-      color: #333;
-    }
-
-    header {
-      background-color: var(--cor-secundaria);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 40px;
-    }
-
-    header img {
-      height: 60px;
-    }
-
-    .banner {
-      text-align: center;
-      padding: 30px 20px;
-      background-color: var(--cor-primaria);
-      color: white;
-    }
-
-    .form-container {
-      max-width: 800px;
-      margin: 40px auto;
-      background-color: var(--cor-branca);
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 6px;
-      box-sizing: border-box;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 30px;
-      padding: 14px;
-      background-color: var(--cor-primaria);
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #8f1011;
-    }
-
-    .btn-voltar {
-      background-color: var(--cor-secundaria);
-      margin-top: 10px;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 13px;
-      color: white;
-      background-color: var(--cor-secundaria);
-      padding: 15px;
-    }
+    :root { --cor-primaria: #cc1719; --cor-secundaria: #000000; --cor-fundo: #f4f4f4; --cor-branca: #ffffff; }
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: var(--cor-fundo); color: #333; }
+    header { background-color: var(--cor-secundaria); display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; }
+    header img { height: 60px; }
+    .banner { text-align: center; padding: 30px 20px; background-color: var(--cor-primaria); color: white; }
+    .form-container { max-width: 800px; margin: 40px auto; background-color: var(--cor-branca); padding: 40px; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; margin-top: 6px; box-sizing: border-box; }
+    textarea { resize: vertical; min-height: 100px; }
+    button { width: 100%; margin-top: 30px; padding: 14px; background-color: var(--cor-primaria); color: white; font-weight: bold; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+    button:hover { background-color: #8f1011; }
+    .btn-voltar { background-color: var(--cor-secundaria); margin-top: 10px; }
+    .footer { text-align: center; margin-top: 40px; font-size: 13px; color: white; background-color: var(--cor-secundaria); padding: 15px; }
   </style>
 </head>
 <body>
@@ -139,12 +60,14 @@ if ($result && $result->num_rows > 0) {
       <input type="text" id="telefone" name="telefone" value="<?= htmlspecialchars($telefone) ?>" required>
 
       <label for="edital_id">Edital</label>
-      <select name="edital_id" id="edital_id" required>
+      <select name="edital_id" id="edital_id" required onchange="carregarCotas()">
         <option value="">Selecione um edital</option>
         <?php foreach ($editais as $edital): ?>
           <option value="<?= $edital['id'] ?>"><?= htmlspecialchars($edital['titulo']) ?></option>
         <?php endforeach; ?>
       </select>
+
+      <div id="cotas_area"></div>
 
       <label for="titulo">Título do Projeto</label>
       <input type="text" id="titulo" name="titulo" required>
@@ -175,19 +98,37 @@ if ($result && $result->num_rows > 0) {
     </form>
   </div>
 
-  <div class="footer">
-    &copy; 2025 Fatec Itapira – Sistema HAE
-  </div>
+  <div class="footer">&copy; 2025 Fatec Itapira – Sistema HAE</div>
 
   <script>
-    document.getElementById('telefone').addEventListener('input', function (e) {
-      let x = e.target.value.replace(/\D/g, '').slice(0, 11);
-      if (x.length >= 2 && x.length <= 6)
-        x = `(${x.slice(0, 2)}) ${x.slice(2)}`;
-      else if (x.length > 6)
-        x = `(${x.slice(0, 2)}) ${x.slice(2, 7)}-${x.slice(7)}`;
-      e.target.value = x;
-    });
+    function carregarCotas() {
+      const edital_id = document.getElementById('edital_id').value;
+      const cotas_area = document.getElementById('cotas_area');
+      cotas_area.innerHTML = "";
+
+      if (!edital_id) return;
+
+      fetch('buscar_cotas.php?edital_id=' + edital_id)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length === 0) {
+            cotas_area.innerHTML = "<p>Este edital não possui cotas cadastradas.</p>";
+            return;
+          }
+          let html = "<label>Selecione a Cota:</label>";
+          data.forEach(cota => {
+            html += `<div style="margin-top:10px;">
+                <input type="radio" name="cota_id" value="${cota.id}" required> 
+                Tipo: ${cota.tipo_hae} | Curso: ${cota.curso} | Qtde: ${cota.quantidade}
+              </div>`;
+          });
+          cotas_area.innerHTML = html;
+        })
+        .catch(err => {
+          cotas_area.innerHTML = "<p>Erro ao buscar cotas.</p>";
+          console.error(err);
+        });
+    }
   </script>
 </body>
 </html>

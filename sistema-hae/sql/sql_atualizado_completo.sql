@@ -104,3 +104,8 @@ CREATE TABLE `relatorios` (
   KEY `id_proposta` (`id_proposta`),
   FOREIGN KEY (`id_proposta`) REFERENCES `propostas` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE inscricoes ADD COLUMN cota_id INT DEFAULT NULL;
+
+ALTER TABLE inscricoes
+ADD CONSTRAINT fk_cota FOREIGN KEY (cota_id) REFERENCES cotas_hae(id);

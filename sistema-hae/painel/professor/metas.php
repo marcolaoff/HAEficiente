@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['perfil'] !== 'professor') {
 $usuario_id = $_SESSION['usuario_id'];
 $inscricoes = [];
 
-$stmt = $conn->prepare("SELECT titulo, data_envio, status, observacoes FROM inscricoes WHERE usuario_id = ?");
+$stmt = $conn->prepare("SELECT id, titulo, data_envio, status, comentario, resposta_professor FROM inscricoes WHERE usuario_id = ?");
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -112,25 +112,10 @@ $stmt->close();
       font-size: 0.9rem;
     }
 
-    .aprovado {
-      background-color: #e0f2f1;
-      color: var(--cor-sucesso);
-    }
-
-    .pendente {
-      background-color: #e1f5fe;
-      color: var(--cor-pendente);
-    }
-
-    .rejeitado {
-      background-color: #ffebee;
-      color: var(--cor-erro);
-    }
-
-    .parcial {
-      background-color: #fff8e1;
-      color: var(--cor-aviso);
-    }
+    .aprovado { background-color: #e0f2f1; color: var(--cor-sucesso); }
+    .pendente { background-color: #e1f5fe; color: var(--cor-pendente); }
+    .rejeitado { background-color: #ffebee; color: var(--cor-erro); }
+    .parcial { background-color: #fff8e1; color: var(--cor-aviso); }
 
     .btn-voltar {
       margin-top: 30px;
@@ -144,24 +129,19 @@ $stmt->close();
       cursor: pointer;
     }
 
-    .btn-voltar:hover {
-      background-color: #333;
+    .btn-voltar:hover { background-color: #333; }
+
+    .btn-acao {
+      padding: 10px 18px;
+      border-radius: 5px;
+      font-weight: bold;
+      border: none;
+      margin-right: 8px;
+      cursor: pointer;
     }
 
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 13px;
-      color: white;
-      background-color: var(--cor-secundaria);
-      padding: 15px;
-    }
-
-    @media (max-width: 600px) {
-      table {
-        font-size: 14px;
-      }
-    }
+    .aceitar { background-color: #2e7d32; color: white; }
+    .recusar { background-color: #c62828; color: white; }
   </style>
 </head>
 <body>
@@ -176,7 +156,7 @@ $stmt->close();
 
   <div class="container">
     <h2>Acompanhe o andamento da sua proposta</h2>
-    <p class="info">Veja abaixo o status das propostas que você enviou para análise.</p>
+    <p class="info">Veja abaixo o status e, caso tenha ressalvas, confirme ou recuse a proposta.</p>
 
     <table>
       <thead>
@@ -184,7 +164,8 @@ $stmt->close();
           <th>Projeto</th>
           <th>Data de Envio</th>
           <th>Status</th>
-          <th>Observações</th>
+          <th>Comentário</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -193,14 +174,32 @@ $stmt->close();
             <td><?= htmlspecialchars($inscricao['titulo']) ?></td>
             <td><?= date('d/m/Y', strtotime($inscricao['data_envio'])) ?></td>
             <td>
-              <span class="status 
-                <?= $inscricao['status'] === 'aprovado' ? 'aprovado' :
-                    ($inscricao['status'] === 'rejeitado' ? 'rejeitado' :
-                    ($inscricao['status'] === 'parcial' ? 'parcial' : 'pendente')) ?>">
+              <span class="status <?= $inscricao['status'] ?>">
                 <?= ucfirst($inscricao['status']) ?>
               </span>
             </td>
-            <td><?= htmlspecialchars($inscricao['observacoes'] ?? '-') ?></td>
+            <td><?= htmlspecialchars($inscricao['comentario'] ?? '-') ?></td>
+            <td>
+              <?php if ($inscricao['status'] === 'parcial' && empty($inscricao['resposta_professor'])): ?>
+                <form method="POST" action="responder_proposta.php" style="display:inline;">
+                  <input type="hidden" name="inscricao_id" value="<?= $inscricao['id'] ?>">
+                  <input type="hidden" name="resposta" value="aceito">
+                  <button type="submit" class="btn-acao aceitar">Aceitar</button>
+                </form>
+
+                <form method="POST" action="responder_proposta.php" style="display:inline;">
+                  <input type="hidden" name="inscricao_id" value="<?= $inscricao['id'] ?>">
+                  <input type="hidden" name="resposta" value="recusado">
+                  <button type="submit" class="btn-acao recusar">Recusar</button>
+                </form>
+              <?php elseif ($inscricao['resposta_professor'] === 'aceito'): ?>
+                ✅ Proposta aceita
+              <?php elseif ($inscricao['resposta_professor'] === 'recusado'): ?>
+                ❌ Proposta recusada
+              <?php else: ?>
+                -
+              <?php endif; ?>
+            </td>
           </tr>
         <?php endforeach; ?>
       </tbody>
