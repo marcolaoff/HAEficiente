@@ -3,32 +3,40 @@ require_once "../../config.php";
 session_start();
 
 if (!isset($_SESSION['usuario_id']) || $_SESSION['perfil'] !== 'professor') {
-    header("Location: ../../login.html");
+    header("Location: ../../login.php");
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario_id = $_SESSION['usuario_id'];
     $edital_id = $_POST['edital_id'] ?? null;
-    $titulo = trim($_POST['titulo'] ?? '');
-    $justificativa = trim($_POST['justificativa'] ?? '');
-    $objetivos = trim($_POST['objetivos'] ?? '');
-    $metodologia = trim($_POST['metodologia'] ?? '');
-    $resultados = trim($_POST['resultados'] ?? '');
-    $cronograma = trim($_POST['cronograma'] ?? '');
+
+    // Novos campos do formulário
+    $nome = trim($_POST['nome']);
+    $email = trim($_POST['email']);
+    $rg = trim($_POST['rg']);
+    $matricula = trim($_POST['matricula']);
+    $tipo_hae = trim($_POST['tipo_hae']);
+    $quantidade_hae = intval($_POST['quantidade_hae']);
+    $projeto_interesse = trim($_POST['projeto_interesse']);
+    $periodo_inicio = $_POST['periodo_inicio'];
+    $periodo_fim = $_POST['periodo_fim'];
+    $horarios_aula = trim($_POST['horarios_aula']);
+    $horario_execucao = trim($_POST['horario_execucao']);
+    $metas = trim($_POST['metas']);
+    $objetivos = trim($_POST['objetivos']);
+    $justificativa = trim($_POST['justificativa']);
+    $recursos = trim($_POST['recursos']);
+    $resultado_esperado = trim($_POST['resultado_esperado']);
+    $metodologia = trim($_POST['metodologia']);
+    $cronograma = trim($_POST['cronograma']);
     $arquivo_pdf = '';
 
-    // Validar campos obrigatórios
-    if (!$edital_id || !$titulo || !$justificativa || !$objetivos || !$metodologia || !$resultados || !$cronograma) {
-        echo "Preencha todos os campos obrigatórios.";
-        exit;
-    }
-
-    // Upload do PDF
+    // Upload do arquivo PDF
     if (isset($_FILES['arquivo_pdf']) && $_FILES['arquivo_pdf']['error'] === UPLOAD_ERR_OK) {
         $extensao = strtolower(pathinfo($_FILES['arquivo_pdf']['name'], PATHINFO_EXTENSION));
         if ($extensao !== 'pdf') {
-            echo "Apenas arquivos PDF são permitidos.";
+            echo "Somente arquivos PDF são permitidos.";
             exit;
         }
 
@@ -43,20 +51,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (move_uploaded_file($_FILES['arquivo_pdf']['tmp_name'], $caminho_arquivo)) {
             $arquivo_pdf = $nome_arquivo;
         } else {
-            echo "Erro ao fazer upload do arquivo.";
+            echo "Erro ao enviar o arquivo.";
             exit;
         }
     }
 
-    // Inserção no banco
+    // Inserção no banco com os novos campos
     $stmt = $conn->prepare("INSERT INTO inscricoes 
-        (usuario_id, edital_id, titulo, justificativa, objetivos, metodologia, resultados, cronograma, arquivo_pdf, status, data_envio) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pendente', NOW())");
+    (usuario_id, edital_id, nome, email, rg, matricula, tipo_hae, quantidade_hae, projeto_interesse, 
+    periodo_inicio, periodo_fim, horarios_aula, horario_execucao, metas, objetivos, justificativa, recursos, 
+    resultado_esperado, metodologia, cronograma, arquivo_pdf, status, data_envio) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pendente', NOW())");
 
-    $stmt->bind_param("iisssssss", 
-        $usuario_id, $edital_id, $titulo, 
-        $justificativa, $objetivos, $metodologia, 
-        $resultados, $cronograma, $arquivo_pdf);
+    $stmt->bind_param("iisssssssssssssssssss",
+        $usuario_id, $edital_id, $nome, $email, $rg, $matricula, $tipo_hae, $quantidade_hae, $projeto_interesse, 
+        $periodo_inicio, $periodo_fim, $horarios_aula, $horario_execucao, $metas, $objetivos, $justificativa, $recursos, 
+        $resultado_esperado, $metodologia, $cronograma, $arquivo_pdf
+    );
 
     if ($stmt->execute()) {
         header("Location: ../professor/confirma-inscricao.php");

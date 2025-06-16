@@ -6,13 +6,26 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
     header("Location: ../../login.html");
     exit();
 }
+
+$usuario_id = $_SESSION['usuario_id'];
+$inscricoes = [];
+
+// Buscar somente as propostas aprovadas
+$stmt = $conn->prepare("SELECT id, titulo FROM inscricoes WHERE usuario_id = ? AND status = 'aprovado'");
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    $inscricoes[] = $row;
+}
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Relatório Final - Sistema HAE</title>
   <style>
     :root {
@@ -20,61 +33,19 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
       --cor-secundaria: #000000;
       --cor-fundo: #f4f4f4;
       --cor-branca: #ffffff;
-      --cor-texto: #333;
     }
-
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--cor-fundo);
     }
-
-    header {
-      background-color: var(--cor-secundaria);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 40px;
-    }
-
-    header img {
-      height: 60px;
-    }
-
-    .banner {
-      text-align: center;
-      padding: 30px 20px;
-      background-color: var(--cor-primaria);
-      color: white;
-    }
-
-    .banner h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      background-color: var(--cor-branca);
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      text-align: center;
-      color: var(--cor-primaria);
-      margin-bottom: 30px;
-    }
-
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
-    input, textarea {
+    header { background-color: var(--cor-secundaria); padding: 10px 40px; display: flex; justify-content: space-between; align-items: center; }
+    header img { height: 60px; }
+    .banner { background-color: var(--cor-primaria); color: white; text-align: center; padding: 30px 20px; }
+    .container { max-width: 800px; margin: 40px auto; background-color: var(--cor-branca); padding: 40px; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
+    h2 { color: var(--cor-primaria); margin-bottom: 30px; text-align: center; }
+    label { display: block; margin-top: 20px; font-weight: bold; }
+    input, select, textarea {
       width: 100%;
       padding: 12px;
       margin-top: 8px;
@@ -82,12 +53,7 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
-
-    textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
+    textarea { resize: vertical; min-height: 120px; }
     button {
       margin-top: 30px;
       width: 100%;
@@ -99,17 +65,12 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
       font-size: 16px;
       cursor: pointer;
     }
-
-    button:hover {
-      background-color: #8f1011;
-    }
-
+    button:hover { background-color: #8f1011; }
     .btn-voltar {
       width: 100%;
       margin-top: 10px;
       background-color: var(--cor-secundaria);
     }
-
     .footer {
       text-align: center;
       margin-top: 40px;
@@ -122,28 +83,31 @@ if (!isset($_SESSION["usuario_id"]) || $_SESSION["perfil"] !== "professor") {
 </head>
 <body>
   <header>
-    <img src="../../imagens/logo_sp.jpeg" alt="Logo Governo SP" />
-    <img src="../../imagens/logo_fatec.jpeg" alt="Logo Fatec Itapira" />
+    <img src="../../imagens/logo_sp.jpeg" alt="Logo SP" />
+    <img src="../../imagens/logo_fatec.jpeg" alt="Logo Fatec" />
   </header>
   
   <div class="banner">
-    <h1>Relatório Final de Projeto</h1>
+    <h1>Envio de Relatório Final</h1>
   </div>
 
   <div class="container">
-    <h2>Informe os resultados das atividades desenvolvidas</h2>
-    <form>
-      <label for="nome">Nome do Professor</label>
-      <input type="text" id="nome" name="nome" placeholder="Ex: João da Silva" required />
+    <h2>Selecione o projeto e envie o relatório</h2>
 
-      <label for="projeto">Título do Projeto</label>
-      <input type="text" id="projeto" name="projeto" placeholder="Título da proposta aprovada" required />
+    <form action="salvar_relatorio.php" method="POST" enctype="multipart/form-data">
+      <label for="inscricao_id">Selecione o projeto aprovado:</label>
+      <select name="inscricao_id" id="inscricao_id" required>
+        <option value="">Selecione...</option>
+        <?php foreach ($inscricoes as $inscricao): ?>
+          <option value="<?= $inscricao['id'] ?>"><?= htmlspecialchars($inscricao['titulo']) ?></option>
+        <?php endforeach; ?>
+      </select>
 
-      <label for="resumo">Resumo das Atividades Realizadas</label>
-      <textarea id="resumo" name="resumo" placeholder="Descreva brevemente as ações, entregas e resultados do projeto." required></textarea>
+      <label for="resumo">Resumo das Atividades Realizadas:</label>
+      <textarea name="resumo" id="resumo" required></textarea>
 
-      <label for="anexo">Anexar Relatório Final (PDF)</label>
-      <input type="file" id="anexo" name="anexo" accept=".pdf" required />
+      <label for="arquivo_pdf">Anexar Relatório Final (PDF)</label>
+      <input type="file" name="arquivo_pdf" id="arquivo_pdf" accept=".pdf" required>
 
       <button type="submit">Enviar Relatório</button>
     </form>
